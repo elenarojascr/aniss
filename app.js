@@ -36,4 +36,6 @@ app.use(function(req, res, next) {
     next(err);
 });
 
+app.set('port', process.env.PORT || 3000);
+
 module.export = app;
