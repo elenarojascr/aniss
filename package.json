@@ -1,0 +1,23 @@
+{
+    "name": "aniss",
+    "version": "1.0.0",
+    "description": "Backend project - ANISS CCSS",
+    "main": "index.js",
+    "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+},
+    "author": "Elena Rojas",
+    "license": "ISC",
+    "bugs": {
+    "url": "https://github.com/elenarojascr/aniss/issues"
+},
+    "homepage": "https://github.com/elenarojascr/aniss#readme",
+    "dependencies": {
+    "body-parser": "^1.13.3",
+        "express": "^4.13.3",
+        "jwt-simple": "^0.3.0",
+        "lodash": "^3.10.1",
+        "mongoose": "^4.1.2",
+        "morgan": "^1.6.1"
+}
+}
