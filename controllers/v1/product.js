@@ -1,9 +1,3 @@
-var versioning = require('./versioning')
-
-var execute = function(){
-
-};
-
 var products = {
 
     getAll: function(req, res) {

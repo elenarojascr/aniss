@@ -1,7 +1,8 @@
-module.exports.secret = '/nJz`7XP0tGuW7gg_YC}_+26@FLmsCU-&5?:XW3Op+bP2`gbqbADPp\'5vR\|y8O\<';
+module.exports.secret = 'CAD5241BA-3D754179F55AB3FD4364662BB4%*&84D22F5(D6AD5F6C8E2D89F4B2)9539';
 
 module.exports.dbConfig = {
-    path:'@ds031873.mongolab.com:31873/aniss',
+    address:'@ds031873.mongolab.com:31873/aniss',
     username:'backendUser',
     password:'Agosto21'
 };
+
