@@ -15,10 +15,12 @@
   "dependencies": {
     "body-parser": "^1.13.3",
     "express": "^4.13.3",
+    "http-status": "^0.2.0",
     "jwt-simple": "^0.3.0",
     "lodash": "^3.10.1",
     "mongoose": "^4.1.2",
     "morgan": "^1.6.1",
-    "password-generator": "^1.0.0"
+    "password-generator": "^1.0.0",
+    "sha1": "^1.1.1"
   }
 }

@@ -1,72 +1,53 @@
 var jwt = require('jwt-simple');
+var sha1 = require('sha1');
+var httpCodes = require('http-status');
+var userDb = require('../dataAccess/user');
+var secret = require('../server/config').secret;
+var expTime = require('../server/config').expTime;
 
 var auth = {
-
     login: function(req, res) {
 
         var username = req.body.username || '';
         var password = req.body.password || '';
 
         if (username == '' || password == '') {
-            res.status(401);
+            res.status(httpCodes.BAD_REQUEST);
             res.json({
-                "status": 401,
+                "status": httpCodes.BAD_REQUEST,
                 "message": "Invalid credentials"
             });
-            return;
         }
+        else {
+            password = sha1(password);
 
-        // Fire a query to your DB and check if the credentials are valid
-        var dbUserObj = auth.validate(username, password);
+            var callback = function (err, user) {
+                if (user) {
+                    // generate a token and dispatch it to the client
+                    res.status(httpCodes.OK);
+                    res.json(genToken(user));
+                }
+                else {
+                    res.status(httpCodes.BAD_REQUEST);
+                    res.json({
+                        "status": httpCodes.BAD_REQUEST,
+                        "message": "Invalid credentials"
+                    });
+                }
+            };
 
-        if (!dbUserObj) { // If authentication fails, we send a 401 back
-            res.status(401);
-            res.json({
-                "status": 401,
-                "message": "Invalid credentials"
-            });
-            return;
+            userDb.find(username, password, callback);
         }
-
-        if (dbUserObj) {
-
-            // If authentication is success, we will generate a token
-            // and dispatch it to the client
-
-            res.json(genToken(dbUserObj));
-        }
-
-    },
-
-    validate: function(username, password) {
-        // spoofing the DB response for simplicity
-        var dbUserObj = { // spoofing a userobject from the DB.
-            name: 'arvind',
-            role: 'admin',
-            username: 'arvind@myapp.com'
-        };
-
-        return dbUserObj;
-    },
-
-    validateUser: function(username) {
-        // spoofing the DB response for simplicity
-        var dbUserObj = { // spoofing a userobject from the DB.
-            name: 'arvind',
-            role: 'admin',
-            username: 'arvind@myapp.com'
-        };
-
-        return dbUserObj;
     }
 }
 
 // private method
 function genToken(user) {
-    var expires = expiresIn(7); // 7 days
+    var expires = expiresIn(expTime);
     var token = jwt.encode({
-        exp: expires
-    }, require('../config/secret')());
+        exp: expires,
+        username: user.id
+    },  secret);
 
     return {
         token: token,

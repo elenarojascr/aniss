@@ -36,4 +36,4 @@ app.use(function(req, res, next) {
 });
 
 app.listen(3000);
-console.log('Express server listening on port ' + app.address().port);
+console.log('Express server listening on port ' + 3000);

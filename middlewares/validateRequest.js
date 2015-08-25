@@ -1,71 +1,59 @@
 var jwt = require('jwt-simple');
 var validateUser = require('../routes/auth').validateUser;
+var httpCodes = require('http-status');
+var secret = require('../server/config.js').secret;
+var userDb = require('../dataAccess/user');
 
 module.exports = function(req, res, next) {
+    var token = req.headers['x-access-token'];
 
-    // When performing a cross domain request, you will recieve
-    // a preflighted request first. This is to check if our the app
-    // is safe.
-
-    // We skip the token outh for [OPTIONS] requests.
-    //if(req.method == 'OPTIONS') next();
-
-    var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
-    var key = (req.body && req.body.x_key) || (req.query && req.query.x_key) || req.headers['x-key'];
-
-    if (token || key) {
+    if (token) {
         try {
-            var decoded = jwt.decode(token, require('../config/secret.js')());
+            var decoded = jwt.decode(token, secret);
 
             if (decoded.exp <= Date.now()) {
-                res.status(400);
+                res.status(httpCodes.BAD_REQUEST);
                 res.json({
-                    "status": 400,
+                    "status": httpCodes.BAD_REQUEST,
                     "message": "Token Expired"
                 });
-                return;
             }
-
-            // Authorize the user to see if s/he can access our resources
-
-            var dbUser = validateUser(key); // The key would be the logged in user's username
-            if (dbUser) {
-
-
-                if ((req.url.indexOf('admin') >= 0 && dbUser.role == 'admin') || (req.url.indexOf('admin') < 0 && req.url.indexOf('/api/v1/') >= 0)) {
-                    next(); // To move to next middleware
-                } else {
-                    res.status(403);
-                    res.json({
-                        "status": 403,
-                        "message": "Not Authorized"
-                    });
-                    return;
+            else {
+                var callback = function(err, dbUser){
+                    if (dbUser) {
+                        if ((req.url.indexOf('admin') >= 0 && dbUser.role == 'admin') || (req.url.indexOf('admin') < 0)) {
+                            next(); // To move to next middleware
+                        } else {
+                            res.status(httpCodes.UNAUTHORIZED);
+                            res.json({
+                                "status": httpCodes.UNAUTHORIZED,
+                                "message": "Not Authorized"
+                            });
+                        }
+                    } else {
+                        // No user with this name exists, respond back with a 401
+                        res.status(httpCodes.UNAUTHORIZED);
+                        res.json({
+                            "status": httpCodes.UNAUTHORIZED,
+                            "message": "Invalid User"
+                        });
+                    }
                 }
-            } else {
-                // No user with this name exists, respond back with a 401
-                res.status(401);
-                res.json({
-                    "status": 401,
-                    "message": "Invalid User"
-                });
-                return;
+                userDb.findOne(decoded.id, callback);
             }
 
         } catch (err) {
-            res.status(500);
+            res.status(httpCodes.INTERNAL_SERVER_ERROR);
             res.json({
-                "status": 500,
-                "message": "Oops something went wrong",
-                "error": err
+                "status": httpCodes.INTERNAL_SERVER_ERROR,
+                "message": "Oops something went wrong"
             });
         }
     } else {
-        res.status(401);
+        res.status(httpCodes.BAD_REQUEST);
         res.json({
-            "status": 401,
+            "status": httpCodes.BAD_REQUEST,
             "message": "Invalid Token or Key"
         });
-        return;
     }
 };

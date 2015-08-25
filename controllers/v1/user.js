@@ -1,5 +1,5 @@
 var dataAccess = require('../../dataAccess/user')
-var httpCodes = require('../../cons').httpCodes;
+var httpCodes = require('https-status');
 var generatePassword = require('password-generator');
 
 //signature of methods
@@ -32,7 +32,7 @@ function create(req, res) {
     var checkResult = function(err, data){
         if(err){
             res.json({
-                status: httpCodes.INTERNAL_ERROR,
+                status: httpCodes.INTERNAL_SERVER_ERROR,
                 message: 'An error happened while inserting the user, try again later.'
             });
         }

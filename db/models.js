@@ -1,11 +1,16 @@
-var db = require('./db/start');
+var db = require('./start');
+
+module.exports ={
+    RoleModel: Role,
+    UserModel: User
+}
 
 var RoleSchema = new db.Schema({
     name: String,
     description: String
 })
 
-module.exports.RoleModel = db.mongoose.model('Role', RoleSchema);
+var Role = db.mongoose.model('Role', RoleSchema);
 
 /*-----------------------------------------------------------------------------*/
 
@@ -19,9 +24,9 @@ var UserSchema = new db.Schema({
     dateOfBirth: Date,
     startDate: Date,
     active: Boolean,
-    role: { type: ObjectId, ref: 'RoleSchema' }
+    role: { type: db.Schema.Types.ObjectId, ref: 'Role' }
 })
 
-module.exports.UserModel = db.mongoose.model('User', UserSchema);
+var User = db.mongoose.model('User', UserSchema);
 
 /*-----------------------------------------------------------------------------*/
