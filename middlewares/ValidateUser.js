@@ -1,9 +1,13 @@
+/**
+ * Created by Elena on 08/2015.
+ */
+
 var jwt = require('jwt-simple');
-var validateUser = require('../routes/auth').validateUser;
 var httpCodes = require('http-status');
-var secret = require('../server/config.js').secret;
+var secret = require('../server/config.json').secret;
 var userDb = require('../dataAccess/user');
 
+/* Checks Authentication (token) and Authorization (user role)*/
 module.exports = function(req, res, next) {
     var token = req.headers['x-access-token'];
 
@@ -11,6 +15,7 @@ module.exports = function(req, res, next) {
         try {
             var decoded = jwt.decode(token, secret);
 
+            //session expired
             if (decoded.exp <= Date.now()) {
                 res.status(httpCodes.BAD_REQUEST);
                 res.json({
@@ -20,7 +25,9 @@ module.exports = function(req, res, next) {
             }
             else {
                 var callback = function(err, dbUser){
+                    //user found
                     if (dbUser) {
+                        //user is requesting admin url and is admin
                         if ((req.url.indexOf('admin') >= 0 && dbUser.role == 'admin') || (req.url.indexOf('admin') < 0)) {
                             next(); // To move to next middleware
                         } else {
@@ -31,7 +38,7 @@ module.exports = function(req, res, next) {
                             });
                         }
                     } else {
-                        // No user with this name exists, respond back with a 401
+                        //User not found
                         res.status(httpCodes.UNAUTHORIZED);
                         res.json({
                             "status": httpCodes.UNAUTHORIZED,

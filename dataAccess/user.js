@@ -1,4 +1,5 @@
-var UserModel = require('../db/models').UserModel;
+
+var UserModel = require('./../db/models').UserModel;
 
 // Exports
 module.exports.add = addFn;
@@ -145,14 +146,15 @@ function findOne(id,callback){
     });
 }
 
-function find(username, password, callback){
-    UserModel.find({username: username, password: password}, function(){
-        if(err){
-            callback(err);
-        }
-        else{
-            user.password = null;
-            callback(null, user);
-        }
+function find(myUsername, myPassword, callback){
+    UserModel.find({username: myUsername, password: myPassword},
+        function(err, user){
+            if(!user || !user.length){
+                callback(err);
+            }
+            else {
+                user[0].password = null;
+                callback(null, user[0]);
+            }
     });
 }

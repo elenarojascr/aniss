@@ -1,4 +1,4 @@
-var dataAccess = require('../../dataAccess/user')
+var dataAccess = require('./../../dataAccess/user')
 var httpCodes = require('https-status');
 var generatePassword = require('password-generator');
 
@@ -10,8 +10,6 @@ var users = {
     update: update,
     delete: deleteUser
 };
-
-module.exports = users;
 
 function getAll(req, res) {
     res.json('NOT IMPLEMENTED');
@@ -59,3 +57,5 @@ function deleteUser(req, res){
     var id = req.params.id;
     res.json('NOT IMPLEMENTED');
 }
+
+module.exports = users;

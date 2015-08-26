@@ -1,4 +1,4 @@
-var RoleModel = require('../db/models').RoleModel;
+var RoleModel = require('./../db/models').RoleModel;
 
 // Exports
 module.exports.add = addFn;

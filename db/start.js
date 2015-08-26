@@ -12,4 +12,5 @@ function connect() {
     var url = 'mongodb://' + config.username + ':' + config.password + config.address;
     mongoose.connect(url);
 }
+
 function disconnect() {mongoose.disconnect()}

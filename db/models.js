@@ -1,10 +1,5 @@
 var db = require('./start');
 
-module.exports ={
-    RoleModel: Role,
-    UserModel: User
-}
-
 var RoleSchema = new db.Schema({
     name: String,
     description: String
@@ -30,3 +25,8 @@ var UserSchema = new db.Schema({
 var User = db.mongoose.model('User', UserSchema);
 
 /*-----------------------------------------------------------------------------*/
+
+module.exports ={
+    RoleModel: Role,
+    UserModel: User
+}

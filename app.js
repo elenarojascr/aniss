@@ -1,6 +1,12 @@
+/**
+ * Created by Elena on 08/2015
+ */
 var express = require('express');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
+var config = require('./server/config') //configuration file
+var common = require('./lib/common')
+var httpStatus = require('http-status');
 
 var app = express();
 
@@ -8,32 +14,28 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 
 app.all('/*', function(req, res, next) {
-    // CORS headers
-    res.header("Access-Control-Allow-Origin", "*"); // restrict it to the required domain
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    // Set custom headers for CORS
-    res.header('Access-Control-Allow-Headers', 'Content-type,Accept,X-Access-Token,X-Key');
+    res.header("Access-Control-Allow-Origin",config.allowedSites); // restrict it to the required domain
+    res.header('Access-Control-Allow-Methods', config.allowedMethods);
+    res.header('Access-Control-Allow-Headers', config.allowedHeaders);
     if (req.method == 'OPTIONS') {
-        res.status(200).end();
+        res.status(httpStatus.OK).end();
     } else {
         next();
     }
 });
 
 // Auth Middleware - This will check if the token is valid
-// Only the requests that start with /api/v1/* will be checked for the token.
-// Any URL's that do not follow the below pattern should be avoided unless you
-// are sure that authentication is not needed
-app.all('/api/:version/*', [require('./middlewares/validateRequest')]);
+app.all('/api/:version/*', [require('./middlewares/ValidateUser')]);
+
+//api versioning
+app.all('/api/:version/*', [require('./middlewares/validateVersion')]);
 
 app.use('/', require('./routes'));
 
 // If no route is matched by now, it must be a 404
 app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
+    common.invalidURLFn(res);
 });
 
-app.listen(3000);
-console.log('Express server listening on port ' + 3000);
+app.listen(config.serverPort);
+console.log('Express server listening on port ' + config.serverPort);
