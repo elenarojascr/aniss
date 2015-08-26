@@ -1,16 +1,6 @@
 
 var UserModel = require('./../db/models').UserModel;
 
-// Exports
-module.exports.add = addFn;
-module.exports.update = updateFn;
-module.exports.delete = deleteFn;
-module.exports.updatePassword = updatePassword;
-module.exports.activate = activate;
-module.exports.findAll = findAll;
-module.exports.findOne = findOne;
-module.exports.find = find;
-
 // Functions
 function addFn(username, email, password, firstName, lastName, dateOfBirth, startDate, identification, roleId, callback) {
     var instance = new UserModel();
@@ -157,4 +147,16 @@ function find(myUsername, myPassword, callback){
                 callback(null, user[0]);
             }
     });
+}
+
+// Exports
+module.exports = {
+    add: addFn,
+    update: updateFn,
+    delete: deleteFn,
+    updatePassword: updatePassword,
+    activate: activate,
+    findAll: findAll,
+    findOne: findOne,
+    find: find
 }

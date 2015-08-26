@@ -1,15 +1,6 @@
-var dataAccess = require('./../../dataAccess/user')
-var httpCodes = require('https-status');
+var dataAccess = require('../../dataAccess/user')
+var httpCodes = require('http-status');
 var generatePassword = require('password-generator');
-
-//signature of methods
-var users = {
-    getAll: getAll,
-    getOne: getOne,
-    create: create,
-    update: update,
-    delete: deleteUser
-};
 
 function getAll(req, res) {
     res.json('NOT IMPLEMENTED');
@@ -58,4 +49,11 @@ function deleteUser(req, res){
     res.json('NOT IMPLEMENTED');
 }
 
-module.exports = users;
+//signature of methods
+module.exports = {
+    getAll: getAll,
+    getOne: getOne,
+    create: create,
+    update: update,
+    delete: deleteUser
+};

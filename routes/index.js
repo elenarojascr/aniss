@@ -28,17 +28,17 @@ router.get('/api/:version/admin/user', function(req, res){
     versions.getController(req.params.version, 'user').getAll(req,res);
 });
 
-router.get('/api/:version/user/admin/:id', function(req, res){
+router.get('/api/:version/admin/user/:id', function(req, res){
     versions.getController(req.params.version, 'user').getOne(req, res);
 });
 
-router.post('/api/:version/user/admin/', function(req, res){
+router.post('/api/:version/admin/user/', function(req, res){
     versions.getController(req.params.version, 'user').create(req, res);
 });
-router.put('/api/:version/user/admin/:id', function(req, res){
+router.put('/api/:version/admin/user/:id', function(req, res){
     versions.getController(req.params.version, 'user').update(req, res);
 });
-router.delete('/api/:version/user/admin/:id', function(req, res){
+router.delete('/api/:version/admin/user/:id', function(req, res){
     var controller = versions.getController(req.params.version, 'user').delete(req, res);
 });
 
