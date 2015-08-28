@@ -5,7 +5,7 @@ var UserSchema = new db.Schema({
     identification: {type:String, unique: true},
     username : {type: String, unique: true},
     email:{type:String, unique:true},
-    password : String,
+    password : { type: String, select: false},
     firstName: String,
     lastName: String,
     dateOfBirth: Date,

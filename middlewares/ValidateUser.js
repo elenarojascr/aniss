@@ -27,14 +27,24 @@ module.exports = function(req, res, next) {
                 var callback = function(err, dbUser){
                     //user found
                     if (dbUser) {
-                        //user is requesting admin url and is admin
-                        if ((req.url.indexOf('admin') >= 0 && dbUser.role == 'admin') || (req.url.indexOf('admin') < 0)) {
-                            next(); // To move to next middleware
-                        } else {
+                        //user is active
+                        if(dbUser.active) {
+                            //user is requesting admin url and is admin
+                            if ((req.url.indexOf('admin') >= 0 && dbUser.role == 'admin') || (req.url.indexOf('admin') < 0)) {
+                                next(); // To move to next middleware
+                            } else {
+                                res.status(httpCodes.UNAUTHORIZED);
+                                res.json({
+                                    "status": httpCodes.UNAUTHORIZED,
+                                    "message": "Not Authorized"
+                                });
+                            }
+                        }
+                        else{
                             res.status(httpCodes.UNAUTHORIZED);
                             res.json({
                                 "status": httpCodes.UNAUTHORIZED,
-                                "message": "Not Authorized"
+                                "message": "Account is inactive"
                             });
                         }
                     } else {

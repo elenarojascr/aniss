@@ -11,7 +11,21 @@
         "password": "Agosto21"
     },
     "apiVersions":["v1"],
-    "apiControllers":["product", "user"]
+    "apiControllers":["product", "user"],
+    "email":{
+        "emailTemplates":[
+            {
+                "name":"createUser",
+                "from":"test.email.cr123@gmail.com",
+                "subject":"Welcome to the app"
+            }
+        ],
+        "service": "gmail",
+        "account": {
+            "user": "test.email.cr123@gmail.com",
+            "password": "password"
+        }
+    }
 }
 
 

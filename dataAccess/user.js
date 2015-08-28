@@ -16,12 +16,7 @@ function addFn(username, email, password, firstName, lastName, dateOfBirth, star
     instance.role = roleId;
 
     instance.save(function (err) {
-        if (err) {
-            callback(err);
-        }
-        else {
-            callback(null, instance);
-        }
+        callback(err, instance)
     });
 }
 
@@ -37,12 +32,7 @@ function updatePassword(id, newPassword, callback){
 
             // save the user
             instance.save(function (err) {
-                if (err) {
-                    callback(err);
-                }
-                else {
-                    callback(null);
-                }
+                callback(err, instance);
             });
         }
     });
@@ -62,12 +52,7 @@ function updateFn(id, firstName, lastName, dateOfBirth, startDate, callback) {
 
             // save the user
             instance.save(function (err) {
-                if (err) {
-                    callback(err);
-                }
-                else {
-                    callback(null);
-                }
+                callback(err, instance);
             });
         }
     });
@@ -80,12 +65,7 @@ function deleteFn(id, callback){
         }
         else {
             instance.remove(function (err) {
-                if (err) {
-                    callback(err);
-                }
-                else {
-                    callback(null);
-                }
+                callback(err, instance);
             });
         }
     });
@@ -102,50 +82,28 @@ function activate(id, callback){
 
             // save the user
             instance.save(function (err) {
-                if (err) {
-                    callback(err);
-                }
-                else {
-                    callback(null);
-                }
+                callback(err, instance);
             });
         }
     });
 }
 
 function findAll(callback){
-    UserModel.find({}, function(err, users) {
-       if(err){
-           callback(err);
-       }
-        else{
-           callback(null, users);
-       }
+    UserModel.find({}, function(err, instances) {
+        callback(err, instances);
     });
 }
 
 function findOne(id,callback){
-    UserModel.findById(id, function(err, user){
-        if(err){
-            callback(err);
-        }
-        else{
-            user.password = null;
-            callback(null, user);
-        }
+    UserModel.findById(id, function(err, instance){
+        callback(err, instance);
     });
 }
 
 function find(myUsername, myPassword, callback){
     UserModel.find({username: myUsername, password: myPassword},
-        function(err, user){
-            if(!user || !user.length){
-                callback(err);
-            }
-            else {
-                user[0].password = null;
-                callback(null, user[0]);
-            }
+        function(err, instance){
+            callback(err, instance);
     });
 }
 

@@ -1,0 +1,23 @@
+<html>
+<head>
+    <title>Email Verification</title>
+</head>
+<body>
+<p>
+    Hi {{firstName}} {{lastName}},
+</p>
+<p>
+    Welcome to MyApp!
+    <br/> Your password is: {{password}}
+    <br/>Please follow the link bellow to activate your account:
+</p>
+<p>
+    <a href="http://myapp.com/activate?tk={{id}}">http://myapp.com/activate?tk={{token}}</a>
+</p>
+<p>
+    Thank you,
+    <br />
+    Myapp
+</p>
+</body>
+</html>
